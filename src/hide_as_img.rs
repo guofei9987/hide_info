@@ -30,7 +30,6 @@ impl HideAsImg {
                 lst.extend_from_slice(&rgb[y][x]);
             }
         }
-        println!("{:?}", lst);
         Ok(deserialization(&lst))
     }
 }

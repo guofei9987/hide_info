@@ -20,7 +20,6 @@ pub fn deserialization(serialized_data: &[u8]) -> Vec<u8> {
 
     let start = 4;
     let end = start + length;
-    println!("数据 {:?}", (start, end, serialized_data.len()));
     if end > serialized_data.len() {
         return Vec::new();
     }
