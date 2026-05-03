@@ -11,4 +11,5 @@ keywords = ["steganography", "watermark", "image", "hide", "security"]
 [dependencies]
 image = "0.25"
 anyhow = "1.0.102"
+clap = { version = "4.4", features = ["derive"] }
 

@@ -1,0 +1,71 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+env:
+  APP_NAME: hide_info
+  VERSION: ${{ github.ref_name }}
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            archive: tar.gz
+            bin: hide_info
+
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            archive: tar.gz
+            bin: hide_info
+
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: zip
+            bin: hide_info.exe
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: Swatinem/rust-cache@v2
+
+      - run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Package
+        shell: bash
+        run: |
+          mkdir dist
+
+          cp target/${{ matrix.target }}/release/${{ matrix.bin }} dist/ || \
+          copy target\${{ matrix.target }}\release\${{ matrix.bin }} dist\
+
+          cp README.md LICENSE dist/ 2>/dev/null || true
+
+          if [ "${{ matrix.archive }}" = "tar.gz" ]; then
+            tar -czf \
+              ${APP_NAME}-${VERSION}-${{ matrix.target }}.tar.gz \
+              -C dist .
+          else
+            powershell Compress-Archive \
+              dist/* \
+              ${APP_NAME}-${VERSION}-${{ matrix.target }}.zip
+          fi
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ env.APP_NAME }}-${{ env.VERSION }}-${{ matrix.target }}.${{ matrix.archive }}

@@ -1,7 +1,5 @@
 use hide_info::hide_as_img::HideAsImg;
-use image::GenericImageView;
 use std::fs;
-use std::path::Path;
 
 #[test]
 fn test_hide_as_img_one() {
