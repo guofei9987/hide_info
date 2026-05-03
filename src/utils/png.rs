@@ -1,9 +1,9 @@
-use anyhow::{anyhow, Result};
-use image::{GenericImage, GenericImageView, ImageBuffer, Luma, Rgb, Rgba};
+use anyhow::Result;
+use image::{ImageBuffer, Luma, Rgb, Rgba};
 use std::io::Cursor;
 
 // 未测试
-pub(crate) fn png_bytes_to_pixels_rgba(data_bytes: &[u8]) -> Result<Vec<Vec<[u8; 4]>>> {
+pub(crate) fn png2rgba(data_bytes: &[u8]) -> Result<Vec<Vec<[u8; 4]>>> {
     let img_reader = Cursor::new(data_bytes);
     let image = image::load(img_reader, image::ImageFormat::Png)?.to_rgba8();
 
@@ -21,9 +21,9 @@ pub(crate) fn png_bytes_to_pixels_rgba(data_bytes: &[u8]) -> Result<Vec<Vec<[u8;
 }
 
 // 未测试
-pub(crate) fn pixels_rgba_to_png_bytes(pixels: &Vec<Vec<[u8; 4]>>) -> Result<Vec<u8>> {
+pub(crate) fn rgba2png(pixels: &Vec<Vec<[u8; 4]>>) -> Result<Vec<u8>> {
     let (width, height) = (pixels[0].len(), pixels.len());
-    let mut image = image::ImageBuffer::new(width as u32, height as u32);
+    let mut image = ImageBuffer::new(width as u32, height as u32);
 
     for pix_y in 0..height {
         for pix_x in 0..width {
@@ -32,16 +32,16 @@ pub(crate) fn pixels_rgba_to_png_bytes(pixels: &Vec<Vec<[u8; 4]>>) -> Result<Vec
             image.put_pixel(pix_x as u32, pix_y as u32, new_pixel);
         }
     }
+
     let mut bytes: Vec<u8> = Vec::new();
     let mut cursor = Cursor::new(&mut bytes);
-
     image.write_to(&mut cursor, image::ImageFormat::Png)?;
 
     Ok(bytes)
 }
 
 // 未测试
-pub(crate) fn png_bytes_to_pixels_gray(data_bytes: &[u8]) -> Result<Vec<Vec<u8>>> {
+pub(crate) fn png2gray(data_bytes: &[u8]) -> Result<Vec<Vec<u8>>> {
     let img_reader = Cursor::new(data_bytes);
     let image = image::load(img_reader, image::ImageFormat::Png)?.to_luma8();
 
@@ -59,9 +59,9 @@ pub(crate) fn png_bytes_to_pixels_gray(data_bytes: &[u8]) -> Result<Vec<Vec<u8>>
 }
 
 // 未测试
-pub(crate) fn pixels_gray_to_png_bytes(pixels: &Vec<Vec<u8>>) -> Result<Vec<u8>> {
+pub(crate) fn gray2png(pixels: &Vec<Vec<u8>>) -> Result<Vec<u8>> {
     let (width, height) = (pixels[0].len(), pixels.len());
-    let mut image = image::ImageBuffer::new(width as u32, height as u32);
+    let mut image = ImageBuffer::new(width as u32, height as u32);
 
     for pix_y in 0..height {
         for pix_x in 0..width {
@@ -97,7 +97,7 @@ pub(crate) fn png2rgb(data_bytes: &[u8]) -> Result<Vec<Vec<[u8; 3]>>> {
 
 pub(crate) fn rgb2png(pixels: &Vec<Vec<[u8; 3]>>) -> Result<Vec<u8>> {
     let (width, height) = (pixels[0].len(), pixels.len());
-    let mut image = image::ImageBuffer::new(width as u32, height as u32);
+    let mut image = ImageBuffer::new(width as u32, height as u32);
 
     for pix_y in 0..height {
         for pix_x in 0..width {
