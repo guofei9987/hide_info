@@ -1,9 +1,6 @@
-use anyhow::{Result, anyhow};
-use image::{GenericImage, GenericImageView, ImageBuffer, Luma, RgbImage, Rgba};
-
+use anyhow::Result;
 use crate::utils::cipher::{deserialization, serialization};
 use crate::utils::png::{png2rgb, rgb2png};
-use std::io::Cursor;
 
 pub struct HideAsImg;
 
@@ -19,7 +16,7 @@ impl HideAsImg {
         let mut rgb: Vec<Vec<[u8; 3]>> = vec![vec![[0u8; 3]; width]; width];
 
         for (i, &byte) in data_to_write.iter().enumerate() {
-            rgb[(i / 3)/ width][i / 3 % width][i % 3] = byte;
+            rgb[(i / 3) / width][i / 3 % width][i % 3] = byte;
         }
         rgb2png(&rgb)
     }
@@ -33,7 +30,7 @@ impl HideAsImg {
                 lst.extend_from_slice(&rgb[y][x]);
             }
         }
-        println!("{:?}",lst);
+        println!("{:?}", lst);
         Ok(deserialization(&lst))
     }
 }

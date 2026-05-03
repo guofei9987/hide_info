@@ -9,27 +9,10 @@ pub fn mirage_tank_pixels(
     a: f32,
     b: Option<f32>,
 ) -> Result<Vec<Vec<[u8; 4]>>> {
-    if img1_rgb.is_empty() || img1_rgb[0].is_empty() {
-        return Err(anyhow!("img1_rgb must not be empty"));
-    }
-    if img2_gray.is_empty() || img2_gray[0].is_empty() {
-        return Err(anyhow!("img2_gray must not be empty"));
-    }
-
     let height = img1_rgb.len();
     let width = img1_rgb[0].len();
-    for row in img1_rgb {
-        if row.len() != width {
-            return Err(anyhow!("img1_rgb rows must have equal width"));
-        }
-    }
-
-    let src_height = img2_gray.len();
-    let src_width = img2_gray[0].len();
-    for row in img2_gray {
-        if row.len() != src_width {
-            return Err(anyhow!("img2_gray rows must have equal width"));
-        }
+    if img2_gray.len() != height || img2_gray[0].len() != width {
+        return Err(anyhow!("img1_rgb and img2_gray must have the same dimensions"));
     }
 
     let mut total = 0f64;
@@ -41,26 +24,12 @@ pub fn mirage_tank_pixels(
     let mean = (total / (width * height) as f64) as f32;
     let b = b.unwrap_or_else(|| (mean - 255.0 * a).max(10.0));
 
-    let mut gray_image = ImageBuffer::new(src_width as u32, src_height as u32);
-    for y in 0..src_height {
-        for x in 0..src_width {
-            gray_image.put_pixel(x as u32, y as u32, Luma([img2_gray[y][x]]));
-        }
-    }
-
-    let resized_gray = image::imageops::resize(
-        &gray_image,
-        width as u32,
-        height as u32,
-        FilterType::Triangle,
-    );
-
     let mut result: Vec<Vec<[u8; 4]>> = vec![vec![[0; 4]; width]; height];
     for y in 0..height {
         for x in 0..width {
             let rgb = img1_rgb[y][x];
             let avg = (rgb[0] as f32 + rgb[1] as f32 + rgb[2] as f32) / 3.0;
-            let grey = resized_gray.get_pixel(x as u32, y as u32)[0] as f32;
+            let grey = img2_gray[y][x] as f32;
             let grey_adjusted = a * grey + b;
 
             let alpha_value = (255.0 - avg + grey_adjusted).clamp(0.0, 255.0);
@@ -104,10 +73,23 @@ pub fn mirage_tank_from_bytes(
     }
 
     let (width2, height2) = img2.dimensions();
-    let mut img2_gray: Vec<Vec<u8>> = vec![vec![0u8; width2 as usize]; height2 as usize];
+    let mut gray_image = ImageBuffer::new(width2, height2);
     for y in 0..height2 {
         for x in 0..width2 {
-            img2_gray[y as usize][x as usize] = img2.get_pixel(x, y)[0];
+            gray_image.put_pixel(x, y, Luma([img2.get_pixel(x, y)[0]]));
+        }
+    }
+
+    let resized_gray = if width2 == width1 && height2 == height1 {
+        gray_image
+    } else {
+        image::imageops::resize(&gray_image, width1, height1, FilterType::Triangle)
+    };
+
+    let mut img2_gray: Vec<Vec<u8>> = vec![vec![0u8; width1 as usize]; height1 as usize];
+    for y in 0..height1 {
+        for x in 0..width1 {
+            img2_gray[y as usize][x as usize] = resized_gray.get_pixel(x, y)[0];
         }
     }
 

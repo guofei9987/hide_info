@@ -1,7 +1,12 @@
 [package]
 name = "hide_info"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
+description = "A collection of information hiding and steganography algorithms"
+repository = "https://github.com/guofei9987/hide_info"
+homepage = "https://www.guofei.site/open_source.html"
+license = "MIT"
+keywords = ["steganography", "watermark", "image", "hide", "security"]
 
 [dependencies]
 image = "0.25"

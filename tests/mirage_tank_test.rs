@@ -1,6 +1,4 @@
-use hide_info::mirage_tank::{mirage_tank_from_bytes, mirage_tank_pixels};
-use image::{ImageBuffer, ImageFormat, Luma, Rgb};
-use std::io::Cursor;
+use hide_info::mirage_tank::mirage_tank_from_bytes;
 use std::fs;
 use anyhow::Result;
 #[test]
