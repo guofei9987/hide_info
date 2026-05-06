@@ -1,12 +1,5 @@
-//! Utility functions for serialization, deserialization, and binary conversion
-
 use std::convert::TryInto;
 
-/// Serialize bytes data with length prefix
-///
-/// 功能：输入数据，输出其封装后的 bytes 类型，其封装以下内容：
-/// - 数据的长度（4个字节，大端序）
-/// - 数据本身（n个字节）
 pub fn serialization(data: &[u8]) -> Vec<u8> {
     let mut result = Vec::new();
     // Add length as 4 bytes in big-endian order
@@ -17,32 +10,24 @@ pub fn serialization(data: &[u8]) -> Vec<u8> {
     result
 }
 
-/// Deserialize data (opposite of serialization)
-///
-/// 与 serialization 相反的操作
-/// Reads the first 4 bytes as length, then extracts the data
 pub fn deserialization(serialized_data: &[u8]) -> Vec<u8> {
     if serialized_data.len() < 4 {
         return Vec::new();
     }
 
-    // Read the length from first 4 bytes (big-endian)
     let length_bytes: [u8; 4] = serialized_data[0..4].try_into().unwrap();
     let length = u32::from_be_bytes(length_bytes) as usize;
 
-    // Extract the data
     let start = 4;
     let end = start + length;
-    println!("数据 {:?}",(start,end,serialized_data.len()));
+    println!("数据 {:?}", (start, end, serialized_data.len()));
     if end > serialized_data.len() {
         return Vec::new();
     }
     serialized_data[start..end].to_vec()
 }
 
-/// Convert bytes to binary string (e.g., "10110")
-///
-/// 把 bytes 转化为 "10110" 这种形式的二进制
+
 pub fn bytes2bin_(bytes1: &[u8]) -> String {
     bytes1
         .iter()
@@ -50,9 +35,7 @@ pub fn bytes2bin_(bytes1: &[u8]) -> String {
         .collect()
 }
 
-/// Convert binary string to bytes (opposite of bytes2bin_)
-///
-/// bytes2bin_ 的相反操作
+
 pub fn bin2bytes_(bin1: &str) -> Vec<u8> {
     if bin1.len() % 8 != 0 {
         return Vec::new();
@@ -66,9 +49,6 @@ pub fn bin2bytes_(bin1: &str) -> Vec<u8> {
         .collect()
 }
 
-/// Convert bytes to list of binary bits (e.g., [1, 0, 1, 1, 0])
-///
-/// 把 bytes 转化为 [1, 0, 1, 1, 0] 这种形式的二进制
 pub fn bytes2bin(bytes1: &[u8]) -> Vec<u8> {
     bytes1
         .iter()
@@ -78,9 +58,6 @@ pub fn bytes2bin(bytes1: &[u8]) -> Vec<u8> {
         .collect()
 }
 
-/// Convert list of binary bits to bytes (opposite of bytes2bin)
-///
-/// bytes2bin 的相反操作
 pub fn bin2bytes(bin1: &[u8]) -> Vec<u8> {
     if bin1.len() % 8 != 0 {
         return Vec::new();
