@@ -1,10 +1,19 @@
 # hide_info
 
-`hide_info` is a Rust library and CLI for hiding data inside images.
+`hide_info` is a Rust project for hiding data inside images or else.
+
+
+## Try it Online
+
+| Feature | Status | Try it online                                                                              |
+|---|--------|--------------------------------------------------------------------------------------------|
+| hide_as_img | ✅      | [https://www.guofei.site/os/hide_as_img.html](https://www.guofei.site/os/hide_as_img.html) |
+| mirage_tank | ✅      | [https://www.guofei.site/os/hide_as_img.html](https://www.guofei.site/os/hide_as_img.html) |
+
 
 ## Features
 
-- `hide_as_img`: hide arbitrary binary data inside a PNG image.
+- `hide_as_img`: hide arbitrary binary data (or files) inside a PNG image.
 - `mirage_tank`: combine an RGB image and a grayscale image into an RGBA image using a light-weight steganography-style transform.
 
 ## Rust library usage
@@ -57,12 +66,6 @@ hide_info mirage_tank \
 
 `--a` is optional and defaults to `0.5`.
 
-## Online demo
-
-| Feature | Status | URL                                                                                        |
-|---|--------|--------------------------------------------------------------------------------------------|
-| hide_as_img | ✅      | [https://www.guofei.site/os/hide_as_img.html](https://www.guofei.site/os/hide_as_img.html) |
-| mirage_tank | ✅      | [https://www.guofei.site/os/hide_as_img.html](https://www.guofei.site/os/hide_as_img.html)                                                                                       |
 
 ## Notes
 
