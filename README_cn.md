@@ -93,3 +93,7 @@ hide_info mirage_tank \
 ```sh
 cargo test
 ```
+
+## 相关项目
+
+Python 版本： [https://github.com/guofei9987/HideInfo](https://github.com/guofei9987/HideInfo)
