@@ -96,4 +96,6 @@ cargo test
 
 ## 相关项目
 
-Python 版本： [https://github.com/guofei9987/HideInfo](https://github.com/guofei9987/HideInfo)
+Python 版本 HideInfo： [https://github.com/guofei9987/HideInfo](https://github.com/guofei9987/HideInfo)
+- 图片盲水印: [https://github.com/guofei9987/blind_watermark](https://github.com/guofei9987/blind_watermark)
+- 文本盲水印: https://github.com/guofei9987/text_blind_watermark

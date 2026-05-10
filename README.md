@@ -80,3 +80,9 @@ The repository includes integration tests under `./tests`.
 ```sh
 cargo test
 ```
+
+## Related Projects
+
+- Python version HideInfo: [https://github.com/guofei9987/HideInfo](https://github.com/guofei9987/HideInfo)
+- Blind&Invisible Watermark: [https://github.com/guofei9987/blind_watermark](https://github.com/guofei9987/blind_watermark)
+- text_blind_watermark (Embed message into text): https://github.com/guofei9987/text_blind_watermark
