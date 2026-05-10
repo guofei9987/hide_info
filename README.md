@@ -22,9 +22,9 @@ Then call it from Rust:
 use hide_info::hide_as_img::HideAsImg;
 
 let data = b"secret binary data";
-let encoder = HideAsImg::new();
-let png_bytes = encoder.encode(data)?;
-let decoded = encoder.decode(&png_bytes)?;
+let hide_as_img = HideAsImg::new();
+let png_bytes = hide_as_img.encode(data)?;
+let decoded = hide_as_img.decode(&png_bytes)?;
 assert_eq!(decoded, data);
 ```
 
@@ -59,10 +59,10 @@ hide_info mirage_tank \
 
 ## Online demo
 
-| Feature | Status | URL |
-|---|---|---|
-| hide_as_img | planned | (coming soon) |
-| mirage_tank | planned | (coming soon) |
+| Feature | Status | URL                                                                                        |
+|---|--------|--------------------------------------------------------------------------------------------|
+| hide_as_img | ✅      | [https://www.guofei.site/os/hide_as_img.html](https://www.guofei.site/os/hide_as_img.html) |
+| mirage_tank | ✅      | [https://www.guofei.site/os/hide_as_img.html](https://www.guofei.site/os/hide_as_img.html)                                                                                       |
 
 ## Notes
 
