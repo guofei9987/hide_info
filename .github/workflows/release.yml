@@ -20,11 +20,11 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
+            target: x86_64-unknown-linux-musl
             archive: tar.gz
             bin: hide_info
 
-          - os: macos-latest
+          - os: macos-14
             target: aarch64-apple-darwin
             archive: tar.gz
             bin: hide_info
@@ -45,14 +45,14 @@ jobs:
 
       - run: cargo build --release --target ${{ matrix.target }}
 
+      - run: strip target/${{ matrix.target }}/release/${{ matrix.bin }} || true
+
       - name: Package
         shell: bash
         run: |
           mkdir dist
 
-          cp target/${{ matrix.target }}/release/${{ matrix.bin }} dist/ || \
-          copy target\${{ matrix.target }}\release\${{ matrix.bin }} dist\
-
+          cp target/${{ matrix.target }}/release/${{ matrix.bin }} dist/
           cp README.md LICENSE dist/ 2>/dev/null || true
 
           if [ "${{ matrix.archive }}" = "tar.gz" ]; then
@@ -61,8 +61,8 @@ jobs:
               -C dist .
           else
             powershell Compress-Archive \
-              dist/* \
-              ${APP_NAME}-${VERSION}-${{ matrix.target }}.zip
+              -Path dist/* \
+              -DestinationPath ${APP_NAME}-${VERSION}-${{ matrix.target }}.zip
           fi
 
       - uses: softprops/action-gh-release@v2
